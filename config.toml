@@ -6,7 +6,7 @@ languageCode = "zh-CN"
 # 是否包括中日韩文字
 hasCJKLanguage = true
 # 网站标题
-title = "Stay hungry, Stay foolish"
+title = "shun-sfoo's blog"
 
 # 更改使用 Hugo 构建网站时使用的默认主题
 theme = "LoveIt"
@@ -15,6 +15,29 @@ theme = "LoveIt"
   # LoveIt 主题版本
   version = "0.2.X"
   defaultTheme = "dark"
+
+  # 主页配置
+  [params.home]
+   # LoveIt 新增 | 0.2.0 RSS 文章数目
+    rss = 10
+    # 主页个人信息
+    [params.home.profile]
+      enable = true
+      # Gravatar 邮箱，用于优先在主页显示的头像
+      gravatarEmail = ""
+      # 主页显示头像的 URL
+      avatarURL = "/images/avatar.png"
+      # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = ""
+      # 主页显示的网站副标题
+      subtitle = "Stay Hungry, Stay Foolish"
+      # 是否为副标题显示打字机动画
+      typeit = true
+      # 是否显示社交账号
+      social = true
+      # LoveIt 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+      disclaimer = ""
+
 
 [menu]
   [[menu.main]]
