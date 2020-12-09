@@ -1,6 +1,8 @@
 ---
 title: "zsh 学习1-变量"
 date: 2020-12-02T22:55:46+08:00
+categories: ["shell"]
+tags: ["zsh"]
 draft: false
 ---
 

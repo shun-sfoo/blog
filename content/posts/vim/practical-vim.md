@@ -1,6 +1,8 @@
 ---
 title: "vim 实用技巧"
 date: 2020-12-02T23:08:16+08:00
+categories: ["shell"]
+tags: ["vim"]
 draft: false
 ---
 
