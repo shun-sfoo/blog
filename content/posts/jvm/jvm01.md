@@ -1,5 +1,5 @@
 ---
-title: "jvm-1 虚拟机介绍"
+title: "JVM-1 虚拟机介绍"
 date: 2020-12-08T16:09:05+08:00
 categories: ["Java"]
 tags: ["JVM"]
