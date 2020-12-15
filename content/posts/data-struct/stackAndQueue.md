@@ -15,6 +15,12 @@ draft: false
 - 栈是一种 _后进先出_ 的数据结构
 - Last In First Out(LIFO)
 
+## Java 中的实现-使用 Deque
+
+`Deque<Integer> stack = new ArrayQueue<>();`
+
+[Java 有哪些不好的设计？ - 刘宇波的回答 - 知乎](https://www.zhihu.com/question/25372706/answer/1252100096)
+
 ## 栈的应用
 
 - 无处不在的 Undo 操作（撤销）
