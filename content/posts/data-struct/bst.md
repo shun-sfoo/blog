@@ -160,4 +160,113 @@ public void levelOrder() {
 }
 ```
 
-### TODO BST 删除操作
+### 二分搜索树的最大值和最小值
+
+```java
+//寻找最大值
+public E maximum() {
+    if (size == 0)
+        throw new IllegalArgumentException("BST is empty");
+    return maximum(root).e;
+}
+
+private Node maximum(Node node) {
+    if (node.right == null)
+        return node;
+    return maximum(node.right);
+}
+// 寻找最小值略
+```
+
+### BST 删除操作
+
+#### 删除最大值/最小值
+
+```java
+//删除最大值
+public E removeMax() {
+    E ret = maximum();
+    root = removeMax(root);
+    return ret;
+}
+
+private Node removeMax(Node node) {
+    if (node.right == null) {
+        Node leftNode = node.left;
+        node.left = null;
+        size--;
+        return leftNode;
+    }
+
+    node.right = removeMin(node.right);
+    return node;
+}
+// 删除最小值略
+```
+
+### 删除任意节点
+
+- 只有左/右子节点：该子节点取代当前节点
+
+#### Hibbard Deletion
+
+删除左右都有孩子的节点 d 找到其后继 s
+
+- `s = min(d->right)`
+- `s->right = removeMin(d->right)`
+- `s->left = d->left`
+
+删除 d ， s 是新的子树的根
+
+同理删除 d 的前驱（predeccesso）也可以完成删除操作。
+
+```java
+// 删除任意节点
+public void remove(E e) {
+    root = remove(root, e);
+}
+
+private Node remove(Node node, E e) {
+    if (node == null)
+        return null;
+
+    if (e.compareTo(node.e) < 0) {
+        node.left = remove(node.left, e);
+        return node;
+    } else if (e.compareTo(node.e) > 0) {
+        node.right = remove(node.right, e);
+        return node;
+    } else { // e.compareTo(node.e) == 0
+
+        // 待删除左子树为空的情况
+        if (node.left == null) {
+            Node rightNode = node.right;
+            node.right = null;
+            size--;
+            return rightNode;
+        }
+
+        // 待删除右子树为空的情况
+        if (node.right == null) {
+            Node leftNode = node.left;
+            node.left = null;
+            size--;
+            return leftNode;
+        }
+
+        // 待删除左右子树均不为空的情况
+        // 找到比待删除节点大的最小节点，即待删除节点右子树的最小节点
+        // 用这个节点顶替待删除节点的位置
+        Node successor = minimum(node.right);
+        successor.right = removeMin(node.right);
+        successor.left = node.left;
+        node.left = node.right = null;
+        return successor;
+    }
+}
+```
+
+### TODO
+
+- 实现 floor ceil rank select
+- rank 和 select 的 node 添加一个 size 属性，包含节点个数(包含自身)
