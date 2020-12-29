@@ -54,6 +54,46 @@ public class UnionFind implements UF {
 发生在 `find()` 操作时
 `parent[p] = parent[parent[p]]`
 
+```java
+// 查找过程, 查找元素p所对应的集合编号
+// O(h)复杂度, h为树的高度
+private int find(int p) {
+    if (p < 0 || p >= parent.length)
+        throw new IllegalArgumentException("p is out of bound.");
+
+    while (p != parent[p]) {
+        parent[p] = parent[parent[p]];
+        p = parent[p];
+    }
+    return p;
+}
+```
+
+## 链接操作
+
+```java
+@Override
+public void unionElements(int p, int q) {
+
+    int pRoot = find(p);
+    int qRoot = find(q);
+
+    if (pRoot == qRoot)
+        return;
+
+    // 根据两个元素所在树的rank不同判断合并方向
+    // 将rank低的集合合并到rank高的集合上
+    if (rank[pRoot] < rank[qRoot])
+        parent[pRoot] = qRoot;
+    else if (rank[qRoot] < rank[pRoot])
+        parent[qRoot] = pRoot;
+    else { // rank[pRoot] == rank[qRoot]
+        parent[pRoot] = qRoot;
+        rank[qRoot] += 1;   // 此时, 我维护rank的值
+    }
+}
+```
+
 ## 时间复杂度
 
 `o(log*n)` -> iterated logarithm
