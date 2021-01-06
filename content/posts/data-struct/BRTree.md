@@ -6,7 +6,17 @@ tags: ["data-struct"]
 draft: false
 ---
 
-# 2-3 树
+# 红黑树性质
+
+结合 2-3 树理解
+
+1. 每个节点或者是红色的，或者是黑色的
+2. 根节点是黑色的
+3. 每一个叶子节点（最后的空节点） 是黑色的
+4. 如果一个节点是红色的，那么他的孩子节点都是黑色的
+5. 从任意一个节点到叶子节点，经过的黑色节点是一样的
+
+## 2-3 树
 
 有助于理解红黑树和 B 类树
 
@@ -51,7 +61,7 @@ draft: false
 
 相等性，红黑树可以看作 2-3 树
 当有三节点时左侧节点作为孩子节点标红表示 2-3 树中两个节点并列
-所有的红色节点都是左倾斜的
+所有的红色节点都是左倾斜的(或者实现右倾斜的版本)
 ![BRTree](/BRTree/BR-23.png)
 ![BRTree1](/BRTree/BR-23-1.png)
 
@@ -62,14 +72,74 @@ draft: false
 
 ## 红黑树添加新元素
 
-2-3 树中添加一个新元素
-或者添加进 2-节点，形成一个 3-节点
-或者添加进 3-节点，暂时形成一个 4-节点
-永远添加红色节点
+- 2-3 树中添加一个新元素
+- 添加进 2 节点，形成一个 3 节点
+- 添加进 3 节点，暂时形成一个 4 节点
+- 永远添加红色节点
+- 根节点为黑色节点
 
-在 2 节点添加在的节点是当前节点的右孩子需要左旋转
-新增节点得到原来节点的颜色，旋转后的节点颜色变成红色
+![ADD](/BRTree/BRTree_ADD.png)
 
-颜色反转(flipColors)
+图中流程可以总结为： **流程想象对应 2-3 树的变换**
+
+1. 如果节点右孩子为红色而左孩子不为红色（都为红只需要颜色翻转）进行左旋转操作，
+   换上去节点的颜色为旋转节点的颜色，旋转节点颜色变成红色, 返回换上去的节点。
+   (对应 2 节点插入到右边和 3 节点插入到中间的情况)
+
+```java
+//   node                     x
+//  /   \     左旋转         /  \
+// T1   x   --------->   node   T3
+//     / \              /   \
+//    T2 T3            T1   T2
+private Node leftRotate(Node node) {
+
+    Node x = node.right;
+
+    // 左旋转
+    node.right = x.left;
+    x.left = node;
+
+    x.color = node.color;
+    node.color = RED;
+
+    return x;
+}
+```
+
+2.如果左孩子为红色并且左孩子的左孩子也为红色进行右旋转操作。
+换上去节点的颜色为旋转节点的颜色，旋转节点颜色变成红色。
+
+```java
+//     node                   x
+//    /   \     右旋转       /  \
+//   x    T2   ------->   y   node
+//  / \                       /  \
+// y  T1                     T1  T2
+private Node rightRotate(Node node) {
+
+    Node x = node.left;
+
+    // 右旋转
+    node.left = x.right;
+    x.right = node;
+
+    x.color = node.color;
+    node.color = RED;
+
+    return x;
+}
+```
+
+3.如果节点的左右孩子都为红色节点进行颜色翻转。
+
+```java
+// 颜色翻转
+private void flipColors(Node node) {
+    node.color = RED;
+    node.left.color = BLACK;
+    node.right.color = BLACK;
+}
+```
 
 ## TODO 右倾红黑树 Splay Tree （伸展树）
