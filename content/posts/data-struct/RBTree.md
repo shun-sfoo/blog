@@ -107,8 +107,8 @@ private Node leftRotate(Node node) {
 }
 ```
 
-2.如果左孩子为红色并且左孩子的左孩子也为红色进行右旋转操作。
-换上去节点的颜色为旋转节点的颜色，旋转节点颜色变成红色。
+2. 如果左孩子为红色并且左孩子的左孩子也为红色进行右旋转操作。
+   换上去节点的颜色为旋转节点的颜色，旋转节点颜色变成红色。
 
 ```java
 //     node                   x
@@ -131,7 +131,7 @@ private Node rightRotate(Node node) {
 }
 ```
 
-3.如果节点的左右孩子都为红色节点进行颜色翻转。
+3. 如果节点的左右孩子都为红色节点进行颜色翻转。
 
 ```java
 // 颜色翻转
@@ -139,6 +139,105 @@ private void flipColors(Node node) {
     node.color = RED;
     node.left.color = BLACK;
     node.right.color = BLACK;
+}
+```
+
+三个过程并不是互斥的。
+
+### RBTree 数据结构
+
+```java
+public class RBTree<K extends Comparable<K>, V> {
+
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
+
+    private class Node {
+        public K key;
+        public V value;
+        public Node left, right;
+        public boolean color;
+
+        public Node(K key, V value) {
+            this.key = key;
+            this.value = value;
+            left = null;
+            right = null;
+            color = RED;
+        }
+    }
+
+    private Node root;
+    private int size;
+
+    public RBTree() {
+        root = null;
+        size = 0;
+    }
+
+}
+```
+
+### 辅助方法 isRed() getNode()
+
+```java
+// 判断节点node的颜色
+private boolean isRed(Node node) {
+    // 所有叶子节点为黑色
+    if (node == null)
+        return BLACK;
+    return node.color;
+}
+
+// getNode 方法作为实现 contains set get 方法的辅助函数
+private Node getNode(Node node, K key) {
+  if (node == null)
+    return null;
+  if (key.compareTo(node.key) > 0) {
+    return getNode(node.right, key);
+  }else if (key.compareTo(node.key) < 0 ) {
+    return getNode(node.left, key);
+  }else {
+    return node;
+  }
+}
+```
+
+### add()
+
+```java
+// 向红黑树中添加新的元素(key, value)
+public void add(K key, V value) {
+    root = add(root, key, value);
+    root.color = BLACK; // 最终根节点为黑色节点
+}
+
+// 向以node为根的红黑树中插入元素(key, value)，递归算法
+// 返回插入新节点后红黑树的根
+private Node add(Node node, K key, V value) {
+
+    if (node == null) {
+        size++;
+        return new Node(key, value); // 默认插入红色节点
+    }
+
+    if (key.compareTo(node.key) < 0)
+        node.left = add(node.left, key, value);
+    else if (key.compareTo(node.key) > 0)
+        node.right = add(node.right, key, value);
+    else // key.compareTo(node.key) == 0
+        node.value = value;
+
+    if (isRed(node.right) && !isRed(node.left))
+        node = leftRotate(node);
+
+    if (isRed(node.left) && isRed(node.left.left))
+        node = rightRotate(node);
+
+    if (isRed(node.left) && isRed(node.right))
+        flipColors(node);
+
+    return node;
 }
 ```
 
