@@ -10,6 +10,8 @@ tags: ['Gentoo']
 
 使用 LiveUSB （推荐 Fedora） 可以直接从磁盘分区开始
 
+更新：心累，还是用 archlinux 😂
+
 ## 磁盘分区
 
 形式： GPT + UEFI
@@ -113,10 +115,10 @@ auto-sync = yes
 
 ### chroot 和 第一次构建
 
-我们先了解下什么是 Chroot。以现在我们的安装为例，
-目前我们运行的软件和内核是 LiveUSB 提供给我们的，根目录是 LiveUSB 的，
-而 Gentoo 系统的根目录在 /mnt/gentoo/ ，我们也没有直接运行的能力，
-因为运行环境也不是 Gentoo 系统的，那么下一步我们就可以通过 Chroot 一系列操作，
+先了解下什么是 Chroot。以现在的安装为例，
+目前运行的软件和内核是 LiveUSB 提供的，根目录是 LiveUSB 的，
+而 Gentoo 系统的根目录在 /mnt/gentoo/ ，也没有直接运行的能力，
+因为运行环境也不是 Gentoo 系统的，那么下一步可以通过 Chroot 一系列操作，
 实现从 LiveUSB 转移到 Gentoo 系统下。
 
 1. 首先复制 DNS 到 Gentoo 系统下：
@@ -185,8 +187,7 @@ auto-sync = yes
 echo "Asia/Shanghai" > /etc/timezone
 emerge --config sys-libs/timezone-data
 
-echo "en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8 zh_CN.UTF-8 UTF-8" >> /etc/locale.gen
 
 locale-gen
 
@@ -227,11 +228,9 @@ tmpfs           /var/tmp    tmpfs size=8G,notaime 0 0
 
 针对你喜好的文件系统安装相对应的工具
 
-```bash
-btrfs: emerge sys-fs/btrfs-progs
-xfs: emerge sys-fs/xfsprogs
-jfs: emerge sys-fs/jfsutils
-```
+- [x] btrfs `emerge sys-fs/btrfs-progs`
+- [ ] xfs `emerge sys-fs/xfsprogs`
+- [ ] jfs `emerge sys-fs/jfsutils`
 
 ### 杂项处理
 
@@ -252,21 +251,23 @@ jfs: emerge sys-fs/jfsutils
 
 3. 安装系统工具：
 
-```bash
-emerge app-admin/sysklogd sys-process/cronie sudo layman grub
-sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
-passwd #设置root密码
-```
+   ```bash
+   emerge app-admin/sysklogd sys-process/cronie sudo layman grub
+   sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
+   passwd #设置root密码
+   ```
 
 4. systemd 再操作一波：
 
-```bash
-sed -i 's/\# GRUB_CMDLINE_LINUX=\"init=\/usr\/lib\/systemd\/systemd\"/GRUB_CMDLINE_LINUX=\"init=\/usr\/lib\/systemd\/systemd\"/g' /etc/default/grub
-ln -sf /proc/self/mounts /etc/mtab
-systemd-machine-id-setup
-```
+   ```bash
+   sed -i 's/\# GRUB_CMDLINE_LINUX=\"init=\/usr\/lib\/systemd\/systemd\"/GRUB_CMDLINE_LINUX=\"init=\/usr\/lib\/systemd\/systemd\"/g' /etc/default/grub
+   ln -sf /proc/self/mounts /etc/mtab
+   systemd-machine-id-setup
+   ```
 
-### 安装内核
+### 安装内核 (待优化)
+
+不定制自动配置
 
 ```bash
 emerge -av genkernel
@@ -319,3 +320,9 @@ kde
 
 gnome
 `emerge -av gnome gnome-desktop gnome-shell gdm gnome-terminal`
+
+## 参考链接
+
+[Langley Houge](https://medium.com/@langleyhouge/gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%E5%8F%8A%E6%80%BB%E7%BB%93-1db269cfa8c7)
+
+[yangmame](https://blog.yangmame.org/Gentoo%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.html)
