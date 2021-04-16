@@ -2,3 +2,6 @@
 	path = public
 	url = https://github.com/shun-sfoo/shun-sfoo.github.io.git
 	branch = main
+[submodule "themes/even"]
+	path = themes/even
+	url = https://github.com/olOwOlo/hugo-theme-even
